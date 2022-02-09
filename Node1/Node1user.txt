@@ -1,0 +1,3 @@
+{"id":"SABUATA","firstName":"Sondos","lastName":"abuata","password":"123","age":"22","gender":"f","address":{"id":"A","city":"A","street":"11"}}
+{"id":"Aseel","firstName":"Aseel","lastName":"abuata","password":"123","age":"17","gender":"f","address":{"id":"B","city":"B","street":"12"}}
+{"id":"AA","firstName":"AA","lastName":"abuata","password":"123","age":"17","gender":"f","address":{"id":"B","city":"B","street":"12"}}
