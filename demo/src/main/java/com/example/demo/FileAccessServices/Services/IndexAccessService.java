@@ -3,14 +3,30 @@ import com.example.demo.FileAccessServices.InfoFromUserIndex.InfoFromIndex;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class IndexAccessService {
 
     private Map<String , Long> fields;
+    private Map<String , ArrayList<Long>> fieldsIndexed;
     private RandomAccessFile file;
-    public IndexAccessService(String fileName, boolean isAdmin){
+    private static volatile IndexAccessService INSTANCE =null;
+
+
+    public static IndexAccessService getInstance(String fileName) throws IOException {
+        if (INSTANCE == null){
+            synchronized (IndexAccessService.class){
+                if (INSTANCE == null){
+                    INSTANCE = new IndexAccessService(fileName , true);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private IndexAccessService(String fileName, boolean isAdmin){
         fields= new HashMap();
 
         try {
@@ -41,9 +57,9 @@ public class IndexAccessService {
    return fields;
     }
 
+
     public void writeFileIndex(String key,Long value) throws IOException {
         Map<String , Long> fieldWrite= new HashMap();
-
         fieldWrite.put(key,value);
         file.seek(file.length());
 

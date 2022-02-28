@@ -5,7 +5,21 @@ import java.io.RandomAccessFile;
 
 public class FileAccessService {
   private RandomAccessFile file;
-  public FileAccessService(String fileName,boolean isAdmin)
+  private static volatile FileAccessService INSTANCE =null;
+
+
+    public static FileAccessService getInstance(String fileName) throws IOException {
+        if (INSTANCE == null){
+            synchronized (FileAccessService.class){
+                if (INSTANCE == null){
+                    INSTANCE = new FileAccessService(fileName , true);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+  private FileAccessService(String fileName,boolean isAdmin)
   {
     try
     {
@@ -23,9 +37,12 @@ public class FileAccessService {
 
   }
 
+
+
   public Long getLength () throws IOException {
     return file.length();
   }
+
 
   public String readFromRandomAccessFile(long position) throws IOException {
     file.seek(position);
@@ -38,6 +55,7 @@ public class FileAccessService {
     String originalString = json + "\n";
     String updatedString = originalString.replace("\n", "\r\n");
     file.write(updatedString.getBytes());
+    file.close();
   }
 
   public void writeToRandomAccessFile(String json) throws IOException {
